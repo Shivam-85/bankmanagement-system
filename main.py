@@ -1,7 +1,7 @@
 import json
 from dataclasses import dataclass, asdict
 
-list1 = []
+
 
 
 @dataclass
@@ -13,17 +13,16 @@ class User:
 
     @staticmethod
     def submit(user_str):
-        data = asdict(user_str)
-        list1.append(data)
-        data = json.dumps(list1)
-
+        user_str = asdict(user_str)
         try:
-            f = open('data.txt', 'w')
+            with open('data.txt', 'r+') as file:
+                file_data = json.load(file)
+                file_data.append(user_str)
+                file.seek(0)
+                json.dump(file_data, file)
         except FileNotFoundError:
             return False
-
-        f.write(data)
-        f.close()
+        file.close()
         return True
 
 
